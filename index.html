@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#14286b">
+<link rel="icon" id="favicon" href="data:,">
+<title>Civic Sense AI – Sangamner Nagarpalika</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+<style>
+  :root{
+    --primary:#14286b; --primary-2:#2346c4; --saffron:#ff7a00; --saffron-2:#ffb347;
+    --women:#e11d48; --women-2:#be185d; --noise:#7c3aed; --noise-2:#4338ca;
+    --danger:#dc2626; --ok:#15803d; --bg:#f4f6fb; --card:#ffffff;
+    --text:#111827; --muted:#5b6475; --border:#dde3ee; --radius:18px;
+    --shadow:0 10px 30px rgba(20,40,107,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Mukta',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px}
+  h1,h2,h3,.bold{font-family:'Baloo 2','Mukta',sans-serif;font-weight:800;letter-spacing:.2px}
+  button{font-family:inherit;cursor:pointer}
+  a{color:inherit}
+  .hidden{display:none!important}
+  .small{font-size:13px;color:var(--muted)}
+
+  /* ---------- Top language bar ---------- */
+  .topbar{background:#0b1740;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:6px 14px;font-size:13px}
+  .topbar .tag{opacity:.85;font-weight:600}
+  .lang{display:flex;background:rgba(255,255,255,.12);border-radius:30px;padding:3px}
+  .lang button{border:none;background:none;color:#fff;font-weight:800;font-size:13px;padding:4px 14px;border-radius:30px;transition:.2s}
+  .lang button.active{background:var(--saffron);color:#fff;box-shadow:0 2px 8px rgba(255,122,0,.5)}
+
+  /* ---------- Header ---------- */
+  header{background:linear-gradient(120deg,var(--primary) 0%,var(--primary-2) 60%,#3b5bdb 100%);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:20;box-shadow:0 6px 20px rgba(20,40,107,.35);overflow:hidden}
+  header::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:translateX(-100%);animation:shine 6s infinite}
+  @keyframes shine{60%,100%{transform:translateX(100%)}}
+  .head-in{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand h1{font-size:22px;line-height:1}
+  .brand .corp{font-family:'Baloo 2';font-weight:700;font-size:15px;color:var(--saffron-2)}
+  .brand .slogan{font-size:12px;opacity:.85;font-weight:600}
+  .user{text-align:right;font-size:13px;font-weight:700}
+  @media(max-width:480px){
+    .brand h1{font-size:19px;white-space:nowrap}
+    .brand .corp{font-size:13px}
+    .logo{width:56px;height:56px}
+    .user #userName{max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  }
+  .user button{margin-top:4px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700}
+
+  /* ---------- Dynamic logo ---------- */
+  .logo{width:66px;height:66px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
+  .logo.big{width:160px;height:160px;margin:0 auto 8px;display:block;filter:drop-shadow(0 12px 24px rgba(20,40,107,.35))}
+  .logo .rot{transform-origin:100px 100px;animation:spin 40s linear infinite}
+  .logo .rays{transform-origin:100px 96px;animation:spin 30s linear infinite}
+  .logo .glow{transform-origin:100px 96px;animation:pulse 3s ease-in-out infinite}
+  .logo .flow{animation:flow 2.2s linear infinite}
+  .logo .flow.f2{animation-duration:3s}
+  .logo .shim{animation:shim 2.2s ease-in-out infinite}
+  .logo .s2{animation-delay:.6s}.logo .s3{animation-delay:1.2s}
+  .logo .tw{animation:shim 3s ease-in-out infinite}.logo .t2{animation-delay:1s}.logo .t3{animation-delay:2s}
+  .logo .flag{transform-origin:50px 85px;animation:flag .9s ease-in-out infinite alternate}
+  .logo .birds{animation:birds 18s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.12);opacity:.55}}
+  @keyframes flow{to{stroke-dashoffset:-48}}
+  @keyframes shim{50%{opacity:.25}}
+  @keyframes flag{to{transform:scaleX(.65) skewY(4deg)}}
+  @keyframes birds{from{transform:translate(-12px,4px)}to{transform:translate(150px,-6px)}}
+  @media(prefers-reduced-motion:reduce){.logo *{animation:none!important}}
+
+  main{max-width:1080px;margin:0 auto;padding:18px 14px 90px}
+
+  .card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:18px}
+
+  /* ---------- Auth ---------- */
+  .auth-wrap{max-width:460px;margin:10px auto}
+  .auth-hero{text-align:center;margin-bottom:14px}
+  .auth-hero h2{font-size:28px;color:var(--primary);line-height:1.1}
+  .auth-hero p{color:var(--muted);font-weight:600}
+  .auth-tabs{display:flex;background:#eef1f8;border-radius:14px;padding:4px;margin-bottom:16px}
+  .auth-tabs button{flex:1;padding:10px;border:none;background:none;font-size:16px;font-weight:800;color:var(--muted);border-radius:10px;transition:.2s}
+  .auth-tabs button.active{background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .keep{display:flex;align-items:center;gap:8px;margin-top:14px;font-weight:700;font-size:14px;cursor:pointer}
+  .keep input{width:20px;height:20px;accent-color:var(--primary)}
+
+  label{display:block;font-weight:800;font-size:14px;margin:12px 0 5px}
+  input,select,textarea{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:12px;font-family:inherit;font-size:16px;font-weight:600;background:#fff;transition:.2s}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary-2);box-shadow:0 0 0 4px rgba(35,70,196,.12)}
+  textarea{min-height:95px;resize:vertical}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:560px){.row{grid-template-columns:1fr}}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border:none;border-radius:12px;font-size:16px;font-weight:800;background:linear-gradient(135deg,var(--primary-2),var(--primary));color:#fff;text-decoration:none;transition:transform .15s, box-shadow .15s;box-shadow:0 6px 16px rgba(35,70,196,.3)}
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .btn.block{width:100%;margin-top:18px}
+  .btn.light{background:#eef1f8;color:var(--primary);box-shadow:none}
+  .btn.women{background:linear-gradient(135deg,var(--women),var(--women-2));box-shadow:0 6px 16px rgba(225,29,72,.35)}
+  .btn.noise{background:linear-gradient(135deg,var(--noise),var(--noise-2));box-shadow:0 6px 16px rgba(124,58,237,.35)}
+  .btn.white{background:#fff;color:var(--women);box-shadow:none}
+  .btn.white.n{color:var(--noise)}
+
+  .msg{padding:11px 14px;border-radius:12px;font-size:14px;font-weight:700;margin-top:12px}
+  .msg.err{background:#fdecea;color:var(--danger)}
+  .msg.ok{background:#e7f6ec;color:var(--ok)}
+  .msg.info{background:#eaf0ff;color:var(--primary-2)}
+
+  /* ---------- Home ---------- */
+  .greet h2{font-size:26px;color:var(--primary);line-height:1.1}
+  .greet p{color:var(--muted);font-weight:600;margin-bottom:14px}
+
+  .featured{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  @media(max-width:700px){.featured{grid-template-columns:1fr}}
+  .fcard{position:relative;border-radius:22px;padding:22px;color:#fff;overflow:hidden;min-height:210px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 14px 30px rgba(0,0,0,.18)}
+  .fcard.women{background:linear-gradient(135deg,#f43f5e,#be185d 70%,#9d174d)}
+  .fcard.noise{background:linear-gradient(135deg,#8b5cf6,#4338ca 75%,#312e81)}
+  .fcard .badge-top{display:inline-block;background:rgba(255,255,255,.22);border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800;letter-spacing:.5px;width:max-content}
+  .fcard h3{font-size:26px;margin-top:8px;line-height:1.1}
+  .fcard p{font-weight:600;opacity:.95;margin:4px 0 14px;max-width:85%}
+  .fcard .ic{position:absolute;right:-10px;top:-10px;font-size:110px;opacity:.18;transform:rotate(-12deg)}
+  .fcard .acts{display:flex;gap:10px;flex-wrap:wrap}
+  .fcard .pulse{position:absolute;right:22px;top:22px;width:14px;height:14px;border-radius:50%;background:#fff}
+  .fcard .pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;animation:ping 1.6s infinite}
+  @keyframes ping{to{transform:scale(3);opacity:0}}
+  .bars{display:flex;gap:4px;align-items:flex-end;height:34px;position:absolute;right:22px;top:20px}
+  .bars span{width:6px;background:#fff;border-radius:3px;animation:eq 1s ease-in-out infinite}
+  .bars span:nth-child(2){animation-delay:.15s}.bars span:nth-child(3){animation-delay:.3s}
+  .bars span:nth-child(4){animation-delay:.45s}.bars span:nth-child(5){animation-delay:.6s}
+  @keyframes eq{0%,100%{height:8px}50%{height:34px}}
+
+  .section-title{font-size:20px;color:var(--primary);margin:6px 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+  .tile{background:#fff;border:none;border-radius:18px;padding:18px 10px;text-align:center;box-shadow:var(--shadow);transition:transform .2s, box-shadow .2s;position:relative;overflow:hidden}
+  .tile:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(20,40,107,.16)}
+  .tile .ic{font-size:34px;display:block}
+  .tile .nm{font-family:'Baloo 2';font-weight:800;font-size:16px;color:var(--primary);display:block;margin-top:6px;line-height:1.15}
+  .tile::before{content:"";position:absolute;left:0;top:0;height:4px;width:100%;background:linear-gradient(90deg,var(--saffron),var(--primary-2))}
+
+  .helplines{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid #fbcfe8;color:var(--women-2);border-radius:30px;padding:7px 14px;font-weight:800;text-decoration:none;font-size:14px}
+  .chip b{color:var(--text)}
+
+  /* ---------- Form view ---------- */
+  .back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid var(--border);border-radius:30px;padding:7px 16px;font-weight:800;color:var(--primary);margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .back:hover{border-color:var(--primary-2)}
+  .form-head{border-radius:18px;padding:18px 20px;color:#fff;margin:-22px -22px 16px;background:linear-gradient(135deg,var(--primary-2),var(--primary))}
+  .form-head.women{background:linear-gradient(135deg,var(--women),var(--women-2))}
+  .form-head.noise{background:linear-gradient(135deg,var(--noise),var(--noise-2))}
+  .form-head h2{font-size:24px;line-height:1.1}
+  .form-head p{font-weight:600;opacity:.92;font-size:14px;margin-top:4px}
+
+  .rakshak{background:#fff1f3;border:2px solid #fecdd3;padding:16px;border-radius:16px;margin-bottom:14px}
+  .rakshak h3{color:var(--women);font-size:18px;margin-bottom:4px}
+  .rakshak p{font-size:14px;font-weight:600;margin-bottom:10px}
+  .rakshak .btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .tips{list-style:none;display:grid;gap:6px;margin-top:6px}
+  .tips li{font-size:14px;font-weight:600;padding-left:22px;position:relative}
+  .tips li::before{content:"✔";position:absolute;left:0;color:var(--women)}
+
+  .meter{background:#f5f3ff;border:2px solid #ddd6fe;padding:16px;border-radius:16px;margin-bottom:14px}
+  .meter h3{color:var(--noise);font-size:18px}
+  .meter p{font-size:14px;font-weight:600}
+  .gauge{height:18px;background:#e9e5ff;border-radius:20px;overflow:hidden;margin:12px 0 6px}
+  .gauge-fill{height:100%;width:0;background:#22c55e;border-radius:20px;transition:width .12s,background .3s}
+  .meter-read{font-family:'Baloo 2';font-weight:800;font-size:34px;color:var(--noise);line-height:1}
+  .meter-read small{font-size:16px}
+
+  .photo-box{border:2px dashed #c7d0e3;border-radius:16px;padding:18px;text-align:center;background:#fafbff}
+  .photo-box img{max-width:100%;border-radius:12px;margin-top:12px}
+  .loc{font-size:14px;font-weight:600;color:var(--muted);margin-top:8px}
+  .loc.good{color:var(--ok)}
+
+  /* ---------- List ---------- */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+  th{background:#f1f4fb;font-size:13px;color:var(--muted);font-weight:800}
+  td b{color:var(--primary)}
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:800}
+  .b-open{background:#fff4e0;color:#b45309}
+  .b-high{background:#fdecea;color:var(--danger)}
+  .b-done{background:#e7f6ec;color:var(--ok)}
+  .table-wrap{overflow-x:auto}
+
+  /* ---------- Floating SOS + toast ---------- */
+  .sos-fab{position:fixed;right:16px;bottom:18px;z-index:30;width:68px;height:68px;border-radius:50%;border:none;background:radial-gradient(circle at 30% 30%,#fb7185,var(--women) 60%,var(--women-2));color:#fff;font-family:'Baloo 2';font-weight:800;font-size:18px;box-shadow:0 10px 25px rgba(225,29,72,.5)}
+  .sos-fab::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:3px solid rgba(225,29,72,.5);animation:ring 1.8s infinite}
+  @keyframes ring{from{transform:scale(.9);opacity:1}to{transform:scale(1.35);opacity:0}}
+  .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);z-index:40;max-width:92%;padding:12px 18px;border-radius:14px;font-weight:700;box-shadow:0 10px 25px rgba(0,0,0,.2)}
+
+  .banner{background:#fff4e0;color:#8a5a00;font-size:13px;font-weight:700;padding:8px 12px;text-align:center}
+  footer{text-align:center;color:var(--muted);font-size:13px;font-weight:600;padding:22px 14px 90px}
+  .spinner{width:18px;height:18px;border:3px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+  .fade{animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- Language bar -->
+<div class="topbar">
+  <span class="tag" data-i18n="slogan"></span>
+  <div class="lang">
+    <button id="langEn" onclick="setLang('en')">English</button>
+    <button id="langMr" onclick="setLang('mr')">मराठी</button>
+  </div>
+</div>
+
+<div id="demoBanner" class="banner hidden" data-i18n="demo"></div>
+
+<header>
+  <div class="head-in">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sangamner Nagarpalika emblem">
+        <defs>
+          <radialGradient id="L-bg" cx="50%" cy="40%" r="65%"><stop offset="0" stop-color="#22398f"/><stop offset="1" stop-color="#0a1438"/></radialGradient>
+          <linearGradient id="L-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff1b0"/><stop offset=".45" stop-color="#e3a400"/><stop offset="1" stop-color="#ffd24d"/></linearGradient>
+          <linearGradient id="L-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16307e"/><stop offset=".35" stop-color="#3d6fd4"/><stop offset=".62" stop-color="#ff9b3d"/><stop offset=".75" stop-color="#ffd27a"/></linearGradient>
+          <radialGradient id="L-sun"><stop offset="0" stop-color="#fffbe0"/><stop offset=".6" stop-color="#ffd23f"/><stop offset="1" stop-color="#ff9800"/></radialGradient>
+          <linearGradient id="L-river" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd8ff"/><stop offset=".35" stop-color="#2f8fe0"/><stop offset="1" stop-color="#0b3d91"/></linearGradient>
+          <linearGradient id="L-land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4caf50"/><stop offset="1" stop-color="#1b5e20"/></linearGradient>
+          <linearGradient id="L-rib" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffa53d"/><stop offset="1" stop-color="#e65c00"/></linearGradient>
+          <clipPath id="L-clip"><circle cx="100" cy="100" r="68"/></clipPath>
+          <path id="L-top" d="M24 100 A76 76 0 0 1 176 100"/>
+          <path id="L-bot" d="M14 100 A86 86 0 0 0 186 100"/>
+        </defs>
+
+        <!-- outer seal -->
+        <circle cx="100" cy="100" r="98" fill="url(#L-bg)"/>
+        <circle cx="100" cy="100" r="95" fill="none" stroke="url(#L-gold)" stroke-width="3"/>
+        <circle class="rot" cx="100" cy="100" r="91" fill="none" stroke="#ff8a1f" stroke-width="2" stroke-dasharray="1.5 5" stroke-linecap="round"/>
+        <g class="ringtext" font-family="'Baloo 2','Mukta',sans-serif" font-weight="800" text-anchor="middle">
+          <text font-size="15" fill="#ffe08a"><textPath href="#L-top" startOffset="50%">संगमनेर नगरपालिका</textPath></text>
+          <text font-size="10.5" letter-spacing="1.6" fill="#ffe08a"><textPath href="#L-bot" startOffset="50%">SANGAMNER NAGARPALIKA</textPath></text>
+          <circle cx="16" cy="100" r="3" fill="#ff8a1f"/><circle cx="184" cy="100" r="3" fill="#ff8a1f"/>
+        </g>
+
+        <!-- landscape -->
+        <g clip-path="url(#L-clip)">
+          <rect x="30" y="30" width="140" height="140" fill="url(#L-sky)"/>
+          <!-- birds -->
+          <g class="birds" fill="none" stroke="#0f1f55" stroke-width="1.3" stroke-linecap="round">
+            <path d="M34 58 q3 -3 6 0 q3 -3 6 0"/><path d="M46 52 q2.5 -2.5 5 0 q2.5 -2.5 5 0"/><path d="M40 47 q2 -2 4 0 q2 -2 4 0"/>
+          </g>
+          <!-- rising sun -->
+          <circle class="glow" cx="100" cy="96" r="30" fill="#ffe08a" opacity=".35"/>
+          <circle class="rays" cx="100" cy="96" r="27" fill="none" stroke="#fff0b8" stroke-width="12" stroke-dasharray="2.2 4.8" opacity=".65"/>
+          <circle cx="100" cy="96" r="15" fill="url(#L-sun)"/>
+          <!-- Sahyadri ranges -->
+          <path d="M30 108 L46 94 L56 99 L70 86 L84 97 L96 93 L110 99 L126 83 L140 96 L154 89 L170 101 V125 H30Z" fill="#46648f" opacity=".9"/>
+          <path d="M30 112 Q52 99 76 109 T126 105 T170 109 V125 H30Z" fill="#2f6b3a"/>
+          <!-- banks -->
+          <rect x="30" y="111" width="140" height="62" fill="url(#L-land)"/>
+          <!-- temple on the ghat -->
+          <g>
+            <path d="M43 113 V105 H45.5 L50 92 L54.5 105 H57 V113Z" fill="#8a3412"/>
+            <path d="M47 105 H53 V113 H47Z" fill="#5a1f08"/>
+            <circle cx="50" cy="91" r="1.4" fill="#ffd24d"/>
+            <line x1="50" y1="91" x2="50" y2="83" stroke="#5a1f08" stroke-width=".8"/>
+            <path class="flag" d="M50 83 L57 85 L50 87Z" fill="#ff7a00"/>
+            <path d="M38 113 h24 v2 h-22 v2 h-20Z" fill="#c9b79c" opacity=".9"/>
+          </g>
+          <!-- city skyline -->
+          <path d="M120 113 V103 h6 v-5 h5 v15 h3 V96 h7 v17 h4 v-9 h6 v9 h4 V104 h6 v9Z" fill="#1d2b5a"/>
+          <g fill="#ffd27a"><rect class="tw" x="128" y="101" width="1.6" height="1.6"/><rect class="tw t2" x="136" y="99" width="1.6" height="1.6"/><rect class="tw" x="136" y="104" width="1.6" height="1.6"/><rect class="tw t2" x="147" y="106" width="1.6" height="1.6"/><rect class="tw t3" x="157" y="107" width="1.6" height="1.6"/><rect class="tw t3" x="122" y="106" width="1.6" height="1.6"/></g>
+          <!-- Amrutvahini Pravara river -->
+          <path d="M93 112 H107 C116 126 138 139 172 148 V172 H28 V148 C62 139 84 126 93 112Z" fill="url(#L-river)"/>
+          <g fill="#ffe08a"><ellipse class="shim" cx="100" cy="117" rx="3" ry=".9"/><ellipse class="shim s2" cx="100" cy="122" rx="5" ry="1.1"/><ellipse class="shim s3" cx="100" cy="128" rx="7.5" ry="1.3"/><ellipse class="shim s2" cx="100" cy="135" rx="10" ry="1.5"/></g>
+          <g fill="none" stroke="#e6f6ff" stroke-linecap="round" opacity=".75">
+            <path class="flow" d="M84 126 Q100 123 116 126" stroke-width="1" stroke-dasharray="5 7"/>
+            <path class="flow f2" d="M70 135 Q100 131 130 135" stroke-width="1.3" stroke-dasharray="7 9"/>
+            <path class="flow" d="M52 144 Q100 139 148 144" stroke-width="1.5" stroke-dasharray="9 10"/>
+            <path class="flow f2" d="M36 153 Q100 147 164 153" stroke-width="1.7" stroke-dasharray="11 12"/>
+          </g>
+        </g>
+        <circle cx="100" cy="100" r="69" fill="none" stroke="url(#L-gold)" stroke-width="3"/>
+
+        <!-- ribbon -->
+        <path d="M50 150 L58 147 V163 L50 166 L54 158Z" fill="#b34700"/>
+        <path d="M150 150 L142 147 V163 L150 166 L146 158Z" fill="#b34700"/>
+        <path d="M58 147 H142 V163 H58Z" fill="url(#L-rib)" stroke="#ffe08a" stroke-width=".8"/>
+        <text x="100" y="158.6" text-anchor="middle" font-family="'Baloo 2','Mukta',sans-serif" font-weight="800" font-size="10" fill="#fff">अमृतवाहिनी प्रवरा</text>
+      </svg>
+      <div>
+        <h1>Civic Sense AI</h1>
+        <div class="corp" data-i18n="corp"></div>
+      </div>
+    </div>
+    <div class="user hidden" id="userBox">
+      <div id="userName"></div>
+      <button onclick="logout()" data-i18n="logout"></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ================= AUTH ================= -->
+  <section id="authView" class="auth-wrap fade">
+    <div class="auth-hero">
+      <svg class="logo big" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sangamner Nagarpalika emblem"></svg>
+      <h2 data-i18n="heroTitle"></h2>
+      <p data-i18n="heroSub"></p>
+    </div>
+    <div class="card">
+      <div class="auth-tabs">
+        <button id="tLogin" class="active" onclick="showAuth('login')" data-i18n="login"></button>
+        <button id="tReg" onclick="showAuth('register')" data-i18n="register"></button>
+      </div>
+
+      <form id="loginForm" onsubmit="doLogin(event)">
+        <label data-i18n="mobile"></label>
+        <input id="lMobile" type="tel" maxlength="10" pattern="[6-9][0-9]{9}" required data-i18n-ph="mobilePh">
+        <label data-i18n="password"></label>
+        <input id="lPass" type="password" required>
+        <label class="keep"><input type="checkbox" id="keepLogged" checked> <span data-i18n="keep"></span></label>
+        <button class="btn block" id="loginBtn" data-i18n="login"></button>
+        <div id="loginMsg"></div>
+      </form>
+
+      <form id="regForm" class="hidden" onsubmit="doRegister(event)">
+        <label data-i18n="fullName"></label>
+        <input id="rName" required>
+        <div class="row">
+          <div>
+            <label data-i18n="mobile"></label>
+            <input id="rMobile" type="tel" maxlength="10" pattern="[6-9][0-9]{9}" required data-i18n-ph="mobilePh">
+          </div>
+          <div>
+            <label data-i18n="ward"></label>
+            <select id="rWard" required></select>
+          </div>
+        </div>
+        <label data-i18n="email"></label>
+        <input id="rEmail" type="email">
+        <label data-i18n="address"></label>
+        <textarea id="rAddress" required style="min-height:60px"></textarea>
+        <div class="row">
+          <div>
+            <label data-i18n="password"></label>
+            <input id="rPass" type="password" minlength="6" required>
+          </div>
+          <div>
+            <label data-i18n="confirmPass"></label>
+            <input id="rPass2" type="password" minlength="6" required>
+          </div>
+        </div>
+        <button class="btn block" id="regBtn" data-i18n="register"></button>
+        <div id="regMsg"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= APP ================= -->
+  <section id="appView" class="hidden">
+
+    <!-- HOME -->
+    <div id="homeView" class="fade">
+      <div class="greet">
+        <h2 id="greetText"></h2>
+        <p data-i18n="greetSub"></p>
+      </div>
+
+      <div class="featured">
+        <div class="fcard women">
+          <span class="pulse"></span>
+          <span class="ic">🛡️</span>
+          <div>
+            <span class="badge-top" data-i18n="priorityTag"></span>
+            <h3 data-i18n="womenTitle"></h3>
+            <p data-i18n="womenSub"></p>
+          </div>
+          <div class="acts">
+            <a class="btn white" id="homeCall" href="#">📞 <span data-i18n="callRk"></span></a>
+            <button class="btn white" onclick="go('form','women')">📝 <span data-i18n="report"></span></button>
+          </div>
+        </div>
+        <div class="fcard noise">
+          <div class="bars"><span></span><span></span><span></span><span></span><span></span></div>
+          <span class="ic">🔊</span>
+          <div>
+            <span class="badge-top" data-i18n="focusTag"></span>
+            <h3 data-i18n="noiseTitle"></h3>
+            <p data-i18n="noiseSub"></p>
+          </div>
+          <div class="acts">
+            <button class="btn white n" onclick="go('form','noise')">🎙️ <span data-i18n="measureReport"></span></button>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title" data-i18n="otherServices"></h3>
+      <div class="grid" id="tileGrid"></div>
+
+      <h3 class="section-title" data-i18n="helplines"></h3>
+      <div class="helplines" id="helplinesHome"></div>
+    </div>
+
+    <!-- FORM -->
+    <div id="formView" class="hidden fade">
+      <button class="back" onclick="goBack()">← <span data-i18n="back"></span></button>
+      <div class="card">
+        <div class="form-head" id="formHead">
+          <h2 id="formTitle"></h2>
+          <p id="formSub"></p>
+        </div>
+
+        <div id="rakshakBox" class="rakshak hidden">
+          <h3>🛡️ <span data-i18n="rkTitle"></span></h3>
+          <p data-i18n="rkText"></p>
+          <div class="btns">
+            <a class="btn women" id="rakshakCall" href="#">📞 <span data-i18n="callRk"></span></a>
+            <button type="button" class="btn women" onclick="sendSOS()">🚨 <span data-i18n="sendSos"></span></button>
+          </div>
+          <div class="helplines" id="helplinesForm"></div>
+          <ul class="tips" id="safetyTips"></ul>
+        </div>
+
+        <div id="meterBox" class="meter hidden">
+          <h3>🎙️ <span data-i18n="meterTitle"></span></h3>
+          <p data-i18n="meterText"></p>
+          <div class="gauge"><div class="gauge-fill" id="gFill"></div></div>
+          <div class="meter-read"><span id="mNow">--</span> <small>dB</small></div>
+          <div id="mResult"></div>
+          <button type="button" class="btn noise" id="meterBtn" style="margin-top:10px" onclick="startMeter()" data-i18n="startMeter"></button>
+          <p class="small" style="margin-top:8px" data-i18n="meterNote"></p>
+        </div>
+
+        <form id="complaintForm" onsubmit="submitComplaint(event)">
+          <label id="subLabel"></label>
+          <select id="cSub" required></select>
+
+          <div id="certFields" class="hidden">
+            <div class="row">
+              <div>
+                <label data-i18n="applicant"></label>
+                <input id="cApplicant">
+              </div>
+              <div>
+                <label data-i18n="purpose"></label>
+                <input id="cPurpose" data-i18n-ph="purposePh">
+              </div>
+            </div>
+          </div>
+
+          <div id="priorityField">
+            <label data-i18n="urgency"></label>
+            <select id="cPriority">
+              <option value="Normal" data-i18n="pNormal"></option>
+              <option value="High" data-i18n="pHigh"></option>
+              <option value="Emergency" data-i18n="pEmergency"></option>
+            </select>
+          </div>
+
+          <label data-i18n="description"></label>
+          <textarea id="cDesc" required data-i18n-ph="descPh"></textarea>
+
+          <label data-i18n="landmark"></label>
+          <input id="cLandmark" required data-i18n-ph="landmarkPh">
+
+          <label data-i18n="photoLabel"></label>
+          <div class="photo-box">
+            <input id="cPhoto" type="file" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(event)">
+            <button type="button" class="btn light" onclick="takePhoto()">📷 <span data-i18n="takePhoto"></span></button>
+            <div id="locStatus" class="loc"></div>
+            <img id="photoPreview" class="hidden" alt="Geotagged photo preview">
+          </div>
+
+          <button class="btn block" id="submitBtn" data-i18n="submit"></button>
+          <div id="submitMsg"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MY COMPLAINTS -->
+    <div id="listView" class="hidden fade">
+      <button class="back" onclick="goBack()">← <span data-i18n="back"></span></button>
+      <div class="card">
+        <h2 style="font-size:24px;color:var(--primary);margin-bottom:12px">📋 <span data-i18n="myComplaints"></span></h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th data-i18n="thId"></th><th data-i18n="thDate"></th><th data-i18n="thCat"></th><th data-i18n="thIssue"></th><th data-i18n="thStatus"></th></tr></thead>
+          <tbody id="listBody"></tbody>
+        </table></div>
+        <div id="listMsg"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button class="sos-fab hidden" id="sosFab" onclick="sendSOS()" title="SOS">SOS</button>
+<div id="toast" class="toast msg hidden"></div>
+
+<footer>
+  <div class="bold" style="color:var(--primary);font-size:16px" data-i18n="corp"></div>
+  <div data-i18n="footer"></div>
+</footer>
+
+<script>
+/* =========================================================
+   CONFIGURATION
+   ========================================================= */
+const CONFIG = {
+  CORP_NAME: "Sangamner Nagarpalika",
+  CORP_NAME_MR: "संगमनेर नगरपालिका",
+  // Google Apps Script Web App URL (working – do not change unless you redeploy)
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxJlDseBEA1FWJXK09PBRb1-qn5Se6GbhmXTs0tJ0pzVekUrOyUUoA9jswR-osMqLTZ/exec",
+  RAKSHAK_DAL_PHONE: "112",          // Replace with the Rakshak Dal helpline number
+  WARDS: 20                          // Number of wards in Sangamner Nagarpalika
+};
+
+/* =========================================================
+   LANGUAGE (English / Marathi)
+   ========================================================= */
+const I18N = {
+  corp:["Sangamner Nagarpalika","संगमनेर नगरपालिका"],
+  slogan:["Clean · Safe · Smart Sangamner","स्वच्छ · सुरक्षित · स्मार्ट संगमनेर"],
+  demo:["Demo mode: Google Sheet not connected. Data is saved only in this browser.","डेमो मोड: Google Sheet जोडलेली नाही. माहिती फक्त या ब्राउझरमध्ये जतन होते."],
+  backendFail:["⚠️ Cannot reach Google Sheet: ","⚠️ Google Sheet शी संपर्क होत नाही: "],
+  heroTitle:["Your City, Your Voice","आपले शहर, आपला आवाज"],
+  heroSub:["Report civic issues to Sangamner Nagarpalika in seconds","संगमनेर नगरपालिकेकडे नागरी तक्रार काही सेकंदात नोंदवा"],
+  login:["Login","लॉगिन"], register:["Register","नोंदणी"],
+  mobile:["Mobile Number","मोबाईल नंबर"], mobilePh:["10-digit mobile","१० अंकी मोबाईल नंबर"],
+  password:["Password","पासवर्ड"], confirmPass:["Confirm Password","पासवर्डची पुष्टी करा"],
+  keep:["Keep me logged in","मला लॉगिन ठेवा"],
+  fullName:["Full Name","पूर्ण नाव"], ward:["Ward No.","प्रभाग क्र."],
+  email:["Email (optional)","ईमेल (ऐच्छिक)"], address:["Residential Address","राहण्याचा पत्ता"],
+  select:["Select","निवडा"], wardN:["Ward","प्रभाग"],
+  logout:["Logout","बाहेर पडा"], back:["Back","मागे"],
+  passMismatch:["Passwords do not match.","पासवर्ड जुळत नाहीत."],
+  regOk:["Registration successful! Please login.","नोंदणी यशस्वी! कृपया लॉगिन करा."],
+  regFail:["Registration failed: ","नोंदणी अयशस्वी: "], loginFail:["Login failed: ","लॉगिन अयशस्वी: "],
+  gm:["Good Morning","सुप्रभात"], ga:["Good Afternoon","शुभ दुपार"], ge:["Good Evening","शुभ संध्याकाळ"],
+  greetSub:["What would you like to report today?","आज आपण कोणती तक्रार नोंदवू इच्छिता?"],
+  priorityTag:["TOP PRIORITY · 24×7","सर्वोच्च प्राधान्य · २४×७"],
+  focusTag:["SPECIAL DRIVE","विशेष मोहीम"],
+  womenTitle:["Women Safety","महिला सुरक्षा"],
+  womenSub:["Rakshak Dal is one tap away. Your safety comes first.","रक्षक दल फक्त एका टॅपवर. आपली सुरक्षा सर्वप्रथम."],
+  noiseTitle:["Noise Pollution","ध्वनी प्रदूषण"],
+  noiseSub:["Measure noise with your phone and report it instantly.","फोनने आवाज मोजा आणि त्वरित तक्रार करा."],
+  callRk:["Call Rakshak Dal","रक्षक दलाला कॉल करा"], report:["Report","तक्रार करा"],
+  measureReport:["Measure & Report","मोजा आणि तक्रार करा"],
+  otherServices:["Other Services","इतर सेवा"], helplines:["Emergency Helplines","आपत्कालीन हेल्पलाईन"],
+  myComplaints:["My Complaints","माझ्या तक्रारी"],
+  rkTitle:["Rakshak Dal – Emergency","रक्षक दल – आपत्कालीन"],
+  rkText:["In immediate danger? Call first. You can submit the complaint with photo once you are safe.","तत्काळ धोका असल्यास आधी कॉल करा. सुरक्षित झाल्यावर फोटोसह तक्रार नोंदवा."],
+  sendSos:["Send SOS with location","लोकेशनसह SOS पाठवा"],
+  sosConfirm:["Send SOS with your live location to Rakshak Dal?","आपल्या लोकेशनसह रक्षक दलाला SOS पाठवायचा का?"],
+  sosGetting:["Getting your location…","आपले लोकेशन मिळवत आहे…"],
+  sosSent:["SOS sent to Rakshak Dal. ID: ","रक्षक दलाला SOS पाठवला. क्रमांक: "],
+  sosFail:[" Please call Rakshak Dal directly."," कृपया थेट रक्षक दलाला कॉल करा."],
+  tips:[["Share your live location with family when travelling late","रात्री उशिरा प्रवास करताना कुटुंबियांना लाईव्ह लोकेशन पाठवा"],
+        ["Save the Rakshak Dal number on speed dial","रक्षक दलाचा नंबर स्पीड डायलवर ठेवा"],
+        ["Report dark or unsafe spots so they can be fixed","अंधाऱ्या किंवा असुरक्षित जागांची तक्रार करा"]],
+  hlRk:["Rakshak Dal","रक्षक दल"], hl112:["Emergency","आपत्कालीन"], hl1091:["Women Helpline","महिला हेल्पलाईन"], hl181:["Women Helpline","महिला हेल्पलाईन"],
+  meterTitle:["Live Noise Meter","थेट आवाज मापक"],
+  meterText:["Hold your phone towards the source and measure for 10 seconds. The reading is added to your complaint.","फोन आवाजाच्या दिशेने धरा आणि १० सेकंद मोजा. नोंद तक्रारीत जोडली जाईल."],
+  startMeter:["▶ Start 10-second measurement","▶ १० सेकंद मोजणी सुरू करा"],
+  measuring:["Measuring…","मोजत आहे…"], measureAgain:["↻ Measure again","↻ पुन्हा मोजा"],
+  meterNote:["Approximate reading from phone microphone. Residential limit: 55 dB (day) / 45 dB (night).","फोन मायक्रोफोनवरून अंदाजे नोंद. निवासी मर्यादा: ५५ dB (दिवस) / ४५ dB (रात्र)."],
+  micDenied:["Microphone permission denied. Please allow microphone access.","मायक्रोफोन परवानगी नाकारली. कृपया परवानगी द्या."],
+  avg:["Average","सरासरी"], peak:["Peak","कमाल"],
+  lvlQuiet:["Quiet","शांत"], lvlOk:["Moderate","मध्यम"], lvlLoud:["Loud – above residential limit","मोठा – निवासी मर्यादेपेक्षा जास्त"], lvlHarm:["Very loud – harmful","अतिशय मोठा – हानिकारक"],
+  issueType:["Issue Type","समस्येचा प्रकार"], certType:["Certificate Type","प्रमाणपत्र प्रकार"],
+  applicant:["Applicant Name","अर्जदाराचे नाव"], purpose:["Purpose","उद्देश"], purposePh:["e.g. School admission","उदा. शाळा प्रवेश"],
+  urgency:["Urgency","तातडी"], pNormal:["Normal","सामान्य"], pHigh:["High","जास्त"], pEmergency:["Emergency","आपत्कालीन"],
+  description:["Description","तपशील"], descPh:["Describe the issue clearly…","समस्या स्पष्टपणे लिहा…"],
+  landmark:["Landmark / Location","खूण / ठिकाण"], landmarkPh:["Near…, road name, area","जवळ…, रस्त्याचे नाव, परिसर"],
+  photoLabel:["Geotagged Photo (required)","जिओटॅग फोटो (आवश्यक)"], takePhoto:["Take Photo","फोटो काढा"],
+  locIdle:["Location will be captured when you take the photo.","फोटो काढताना लोकेशन घेतले जाईल."],
+  locWait:["📍 Getting your location…","📍 लोकेशन मिळवत आहे…"], stamping:["🗺️ Stamping location on photo…","🗺️ फोटोवर लोकेशन छापत आहे…"],
+  subCert:["Apply for a certificate. A geotagged photo of the applicant/premises is required.","प्रमाणपत्रासाठी अर्ज करा. अर्जदार/जागेचा जिओटॅग फोटो आवश्यक."],
+  subRk:["This complaint goes directly to the Rakshak Dal (Nagarpalika security force).","ही तक्रार थेट रक्षक दलाकडे (नगरपालिका सुरक्षा दल) जाते."],
+  subNoise:["Measure the noise level, take a photo and submit.","आवाजाची पातळी मोजा, फोटो काढा आणि तक्रार पाठवा."],
+  subDefault:["Report the issue with a geotagged photo so the field team can locate it.","जिओटॅग फोटोसह तक्रार करा, म्हणजे कर्मचारी जागा शोधू शकतील."],
+  submit:["Submit Complaint & Download Word File","तक्रार पाठवा व Word फाईल डाउनलोड करा"],
+  submitting:["Submitting…","पाठवत आहे…"], wait:["Please wait…","कृपया थांबा…"],
+  photoReq:["Please take a geotagged photo before submitting.","तक्रार पाठवण्यापूर्वी जिओटॅग फोटो काढा."],
+  submitOk:["✅ Complaint registered successfully.","✅ तक्रार यशस्वीरीत्या नोंदवली."],
+  cid:["Complaint ID","तक्रार क्रमांक"], fwdRk:["Forwarded to Rakshak Dal.","रक्षक दलाकडे पाठवली."],
+  docDl:["The Word file has been downloaded.","Word फाईल डाउनलोड झाली."],
+  submitFail:["Submission failed: ","तक्रार पाठवता आली नाही: "],
+  thId:["ID","क्रमांक"], thDate:["Date","दिनांक"], thCat:["Category","विभाग"], thIssue:["Issue","समस्या"], thStatus:["Status","स्थिती"],
+  loading:["Loading…","लोड होत आहे…"], noComplaints:["No complaints yet.","अद्याप कोणतीही तक्रार नाही."],
+  loadFail:["Could not load complaints. ","तक्रारी लोड झाल्या नाहीत. "],
+  stOpen:["Open","प्रलंबित"], stProgress:["In Progress","कार्यवाही सुरू"], stResolved:["Resolved","निकाली"], stClosed:["Closed","बंद"],
+  footer:["Civic Sense AI · Citizen Grievance Portal","Civic Sense AI · नागरिक तक्रार पोर्टल"]
+};
+let lang = "en";
+try { lang = localStorage.getItem("cs_lang") || "en"; } catch(e){}
+const t = k => { const v = I18N[k]; return v ? v[lang==="mr"?1:0] : k; };
+const L = pair => pair[lang==="mr"?1:0];
+
+/* =========================================================
+   CATEGORIES  (values saved in English; shown in chosen language)
+   ========================================================= */
+const CATEGORIES = [
+  {id:"women", icon:"🛡️", en:"Women Safety", mr:"महिला सुरक्षा", rakshak:true, theme:"women",
+   subs:[["Harassment / eve-teasing","छेडछाड"],["Stalking","पाठलाग"],["Unsafe / dark area","असुरक्षित / अंधारी जागा"],["Threat or intimidation","धमकी किंवा दहशत"],["Other safety concern","इतर सुरक्षा समस्या"]]},
+  {id:"noise", icon:"🔊", en:"Noise Pollution", mr:"ध्वनी प्रदूषण", meter:true, theme:"noise",
+   subs:[["Loudspeaker / DJ","लाऊडस्पीकर / डीजे"],["Construction noise at night","रात्री बांधकामाचा आवाज"],["Vehicle horn / silencer","वाहनांचे हॉर्न / सायलेन्सर"],["Industrial noise","औद्योगिक आवाज"],["Other","इतर"]]},
+  {id:"pothole", icon:"🕳️", en:"Potholes", mr:"खड्डे",
+   subs:[["Pothole on road","रस्त्यावर खड्डा"],["Broken road surface","तुटलेला रस्ता"],["Open manhole","उघडे मॅनहोल"],["Damaged footpath","खराब पदपथ"],["Speed breaker issue","गतिरोधक समस्या"]]},
+  {id:"garbage", icon:"🗑️", en:"Garbage Collection", mr:"कचरा संकलन",
+   subs:[["Garbage not collected","कचरा उचलला नाही"],["Overflowing bin","कचराकुंडी भरून वाहते"],["Garbage dumped in open","उघड्यावर कचरा टाकला"],["Dead animal","मृत प्राणी"],["Drain/gutter blocked","नाली/गटार तुंबले"],["Burning of garbage","कचरा जाळणे"]]},
+  {id:"water", icon:"🚰", en:"Water Supply", mr:"पाणीपुरवठा",
+   subs:[["No water supply","पाणीपुरवठा नाही"],["Low pressure","कमी दाब"],["Dirty/contaminated water","गढूळ/दूषित पाणी"],["Pipeline leakage","पाईपलाईन गळती"],["Irregular timing","अनियमित वेळ"],["New connection request","नवीन नळ जोडणी"]]},
+  {id:"traffic", icon:"🚦", en:"Traffic", mr:"वाहतूक",
+   subs:[["Illegal parking","बेकायदेशीर पार्किंग"],["Signal not working","सिग्नल बंद"],["Encroachment on road","रस्त्यावर अतिक्रमण"],["Traffic jam (regular)","नेहमीची वाहतूक कोंडी"],["Missing signboard","सूचना फलक नाही"],["Street light not working","पथदिवा बंद"]]},
+  {id:"quarrel", icon:"⚠️", en:"Citizen Disputes", mr:"नागरिक वाद", rakshak:true, theme:"women",
+   subs:[["Quarrel / fight in public","सार्वजनिक भांडण / मारामारी"],["Neighbour dispute","शेजाऱ्यांशी वाद"],["Drunken nuisance","मद्यपींचा उपद्रव"],["Group clash","गटांमधील संघर्ष"],["Other disturbance","इतर गोंधळ"]]},
+  {id:"cert", icon:"📜", en:"Certificates", mr:"प्रमाणपत्रे", cert:true,
+   subs:[["Birth Certificate","जन्म दाखला"],["Death Certificate","मृत्यू दाखला"],["Residence Certificate","रहिवासी दाखला"],["Marriage Registration","विवाह नोंदणी"],["Property Tax No-Dues","मालमत्ता कर थकबाकी नसल्याचा दाखला"],["Trade License","व्यापार परवाना"],["Building Permission / NOC","बांधकाम परवानगी / ना-हरकत"]]},
+  {id:"mine", icon:"📋", en:"My Complaints", mr:"माझ्या तक्रारी", list:true}
+];
+
+/* =========================================================
+   STATE + HELPERS
+   ========================================================= */
+let user = null;
+let current = null;
+let photo = null;      // {dataUrl, lat, lng, acc, time, place}
+let noise = null;      // {avg, peak}
+let view = "home";
+
+const $ = id => document.getElementById(id);
+function msg(id, text, type="err"){ $(id).innerHTML = text ? `<div class="msg ${type}">${text}</div>` : ""; }
+function busy(btn, on, label){ btn.disabled = on; if(on){btn.dataset.l=btn.innerHTML;btn.innerHTML='<span class="spinner"></span> '+(label||t("wait"));} else btn.innerHTML=btn.dataset.l; }
+async function sha256(s){
+  const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+function fmtDate(d){ return new Date(d).toLocaleString(lang==="mr"?"mr-IN":"en-IN",{dateStyle:"medium",timeStyle:"short"}); }
+let toastTimer;
+function toast(text, type="ok"){
+  const el=$("toast"); el.className=`toast msg ${type}`; el.innerHTML=text;
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.add("hidden"),6000);
+}
+function store(){ try{ return localStorage; }catch(e){ return null; } }
+
+/* =========================================================
+   API – Google Apps Script backend (unchanged)
+   ========================================================= */
+async function parseReply(r){
+  const text = await r.text();
+  try { return JSON.parse(text); }
+  catch(e){
+    if (/accounts\.google\.com|ServiceLogin|Sign in/i.test(text))
+      throw new Error("Backend asks for Google sign-in. Redeploy the Apps Script with 'Who has access: Anyone'.");
+    if (/authoriz|permission/i.test(text))
+      throw new Error("Apps Script is not authorized. Open the script, run setup() once and allow access.");
+    if (/not found|unable to open|404/i.test(text))
+      throw new Error("Web App URL is wrong or the deployment was deleted. Copy the latest /exec URL.");
+    const plain = text.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi," ")
+                      .replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim().slice(0,250);
+    console.log("Backend raw reply:", text);
+    throw new Error("Backend did not return JSON (HTTP " + r.status + "). Google says: \"" + plain + "\"");
+  }
+}
+
+async function api(action, data){
+  if (CONFIG.SCRIPT_URL){
+    const r = await fetch(CONFIG.SCRIPT_URL, {
+      method:"POST",
+      redirect:"follow",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify({action, ...data})
+    });
+    return parseReply(r);
+  }
+  return demoApi(action, data);
+}
+
+async function checkBackend(){
+  if (!CONFIG.SCRIPT_URL) return;
+  const b = $("demoBanner");
+  try{
+    const r = await fetch(CONFIG.SCRIPT_URL + "?action=ping", {redirect:"follow"});
+    const j = await parseReply(r);
+    if (!j.ok) throw new Error(j.error);
+  }catch(err){
+    b.style.background="#fdecea"; b.style.color="#c0392b";
+    b.removeAttribute("data-i18n");
+    b.innerHTML = t("backendFail") + err.message;
+    b.classList.remove("hidden");
+  }
+}
+
+function demoApi(action, d){
+  const users = JSON.parse(localStorage.getItem("cs_users")||"{}");
+  const comps = JSON.parse(localStorage.getItem("cs_comps")||"[]");
+  if (action==="register"){
+    if (users[d.mobile]) return {ok:false, error:"This mobile number is already registered."};
+    users[d.mobile] = {...d, created:new Date().toISOString()};
+    localStorage.setItem("cs_users", JSON.stringify(users));
+    return {ok:true};
+  }
+  if (action==="login"){
+    const u = users[d.mobile];
+    if (!u || u.passwordHash!==d.passwordHash) return {ok:false, error:"Invalid mobile number or password."};
+    const {passwordHash, ...safe} = u; return {ok:true, user:safe};
+  }
+  if (action==="complaint"){
+    const {docxBase64, ...c} = d;
+    comps.push({...c, status:"Open"});
+    localStorage.setItem("cs_comps", JSON.stringify(comps));
+    return {ok:true, id:c.id};
+  }
+  if (action==="list") return {ok:true, complaints: comps.filter(c=>c.mobile===d.mobile).reverse()};
+  return {ok:false, error:"Unknown action"};
+}
+
+/* =========================================================
+   LANGUAGE SWITCH
+   ========================================================= */
+function setLang(l){
+  lang = l; try{ localStorage.setItem("cs_lang", l); }catch(e){}
+  document.documentElement.lang = l;
+  $("langEn").classList.toggle("active", l==="en");
+  $("langMr").classList.toggle("active", l==="mr");
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+  renderWards();
+  if (user){ renderHome(); if(view==="form" && current) renderForm(true); if(view==="list") loadList(); }
+  if (!photo) $("locStatus").textContent = t("locIdle");
+}
+function renderWards(){
+  const v = $("rWard").value;
+  $("rWard").innerHTML = `<option value="">${t("select")}</option>` +
+    Array.from({length:CONFIG.WARDS},(_,i)=>`<option value="Ward ${i+1}">${t("wardN")} ${i+1}</option>`).join("");
+  $("rWard").value = v;
+}
+
+/* =========================================================
+   AUTH (logic unchanged; "keep me logged in" added)
+   ========================================================= */
+function showAuth(which){
+  $("loginForm").classList.toggle("hidden", which!=="login");
+  $("regForm").classList.toggle("hidden", which!=="register");
+  $("tLogin").classList.toggle("active", which==="login");
+  $("tReg").classList.toggle("active", which==="register");
+}
+
+async function doRegister(e){
+  e.preventDefault();
+  if ($("rPass").value !== $("rPass2").value) return msg("regMsg",t("passMismatch"));
+  const btn=$("regBtn"); busy(btn,true);
+  try{
+    const res = await api("register",{
+      name:$("rName").value.trim(), mobile:$("rMobile").value.trim(),
+      email:$("rEmail").value.trim(), ward:$("rWard").value,
+      address:$("rAddress").value.trim(), passwordHash: await sha256($("rPass").value)
+    });
+    if(res.ok){ msg("regMsg",t("regOk"),"ok"); $("regForm").reset(); setTimeout(()=>showAuth("login"),1200); }
+    else msg("regMsg", res.error);
+  }catch(err){ msg("regMsg",t("regFail")+err.message); }
+  busy(btn,false);
+}
+
+async function doLogin(e){
+  e.preventDefault();
+  const btn=$("loginBtn"); busy(btn,true);
+  try{
+    const res = await api("login",{ mobile:$("lMobile").value.trim(), passwordHash: await sha256($("lPass").value) });
+    if(res.ok){
+      user=res.user;
+      const keep = $("keepLogged").checked;
+      try{
+        if (keep) localStorage.setItem("cs_user",JSON.stringify(user));
+        else { localStorage.removeItem("cs_user"); sessionStorage.setItem("cs_user",JSON.stringify(user)); }
+      }catch(e){}
+      enterApp();
+    }
+    else msg("loginMsg", res.error);
+  }catch(err){ msg("loginMsg",t("loginFail")+err.message); }
+  busy(btn,false);
+}
+
+function logout(){
+  try{ localStorage.removeItem("cs_user"); sessionStorage.removeItem("cs_user"); }catch(e){}
+  location.reload();
+}
+
+function enterApp(){
+  $("authView").classList.add("hidden");
+  $("appView").classList.remove("hidden");
+  $("userBox").classList.remove("hidden");
+  $("sosFab").classList.remove("hidden");
+  $("userName").textContent = `👤 ${(user.name||"").split(" ")[0]} · ${user.ward||""}`;
+  renderHome();
+  history.replaceState({view:"home"}, "");
+  go("home", null, false);
+}
+
+/* =========================================================
+   NAVIGATION (Back button + phone back button)
+   ========================================================= */
+function go(v, catId, push=true){
+  stopMeter();
+  view = v;
+  $("homeView").classList.toggle("hidden", v!=="home");
+  $("formView").classList.toggle("hidden", v!=="form");
+  $("listView").classList.toggle("hidden", v!=="list");
+  if (v==="form"){ current = CATEGORIES.find(c=>c.id===catId); renderForm(false); }
+  if (v==="list") loadList();
+  if (push) history.pushState({view:v, catId}, "");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function goBack(){
+  if (history.state && history.state.view && history.state.view!=="home") history.back();
+  else go("home", null, false);
+}
+window.addEventListener("popstate", e=>{
+  if (!user) return;
+  const s = e.state || {view:"home"};
+  go(s.view, s.catId, false);
+});
+
+/* =========================================================
+   HOME
+   ========================================================= */
+function renderHome(){
+  const h = new Date().getHours();
+  const g = h<12 ? t("gm") : h<17 ? t("ga") : t("ge");
+  $("greetText").textContent = `${g}, ${(user.name||"").split(" ")[0]} 👋`;
+  $("tileGrid").innerHTML = CATEGORIES.filter(c=>!c.theme || c.id==="quarrel").map(c=>`
+    <button class="tile" onclick="go('${c.list?"list":"form"}','${c.id}')">
+      <span class="ic">${c.icon}</span><span class="nm">${L([c.en,c.mr])}</span>
+    </button>`).join("");
+  const hl = helplinesHTML();
+  $("helplinesHome").innerHTML = hl; $("helplinesForm").innerHTML = hl;
+  $("safetyTips").innerHTML = I18N.tips.map(p=>`<li>${L(p)}</li>`).join("");
+}
+function helplinesHTML(){
+  return [[t("hlRk"),CONFIG.RAKSHAK_DAL_PHONE],[t("hl112"),"112"],[t("hl1091"),"1091"],[t("hl181"),"181"]]
+    .map(([n,p])=>`<a class="chip" href="tel:${p}">📞 ${n} <b>${p}</b></a>`).join("");
+}
+
+/* =========================================================
+   COMPLAINT FORM
+   ========================================================= */
+function renderForm(keepValues){
+  const c = current;
+  $("formHead").className = "form-head " + (c.theme||"");
+  $("formTitle").textContent = `${c.icon} ${L([c.en,c.mr])}`;
+  $("formSub").textContent = c.cert ? t("subCert") : c.rakshak ? t("subRk") : c.meter ? t("subNoise") : t("subDefault");
+  $("rakshakBox").classList.toggle("hidden", !c.rakshak);
+  $("meterBox").classList.toggle("hidden", !c.meter);
+  $("certFields").classList.toggle("hidden", !c.cert);
+  $("priorityField").classList.toggle("hidden", !!c.cert);
+  $("subLabel").textContent = c.cert ? t("certType") : t("issueType");
+
+  const prevSub = $("cSub").value;
+  $("cSub").innerHTML = `<option value="">${t("select")}</option>` + c.subs.map(s=>`<option value="${s[0]}">${L(s)}</option>`).join("");
+  $("submitBtn").className = "btn block " + (c.theme||"");
+
+  if (keepValues){ $("cSub").value = prevSub; return; }
+  $("complaintForm").reset();
+  $("cApplicant").required = !!c.cert;
+  $("cApplicant").value = c.cert ? user.name : "";
+  $("cPriority").value = c.rakshak ? "High" : "Normal";
+  resetPhoto(); resetMeter(); msg("submitMsg","");
+}
+
+/* =========================================================
+   NOISE METER (phone microphone, approximate dB)
+   ========================================================= */
+const meter = {running:false};
+function levelText(db){
+  return db<=45 ? [t("lvlQuiet"),"#22c55e"] : db<=55 ? [t("lvlOk"),"#eab308"] : db<=70 ? [t("lvlLoud"),"#f97316"] : [t("lvlHarm"),"#dc2626"];
+}
+function resetMeter(){
+  noise = null; $("mNow").textContent="--"; $("gFill").style.width="0"; msg("mResult","");
+  $("meterBtn").textContent = t("startMeter");
+}
+async function startMeter(){
+  if (meter.running) return;
+  try{
+    meter.stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  }catch(e){ msg("mResult", t("micDenied")); return; }
+  meter.ctx = new (window.AudioContext||window.webkitAudioContext)();
+  const src = meter.ctx.createMediaStreamSource(meter.stream);
+  const an = meter.ctx.createAnalyser(); an.fftSize = 2048; src.connect(an);
+  const buf = new Float32Array(an.fftSize);
+  let sum=0, n=0, peak=0; const end = Date.now()+10000;
+  meter.running = true; $("meterBtn").disabled = true; $("meterBtn").textContent = t("measuring"); msg("mResult","");
+
+  const tick = ()=>{
+    if (!meter.running) return;
+    an.getFloatTimeDomainData(buf);
+    let s=0; for (let i=0;i<buf.length;i++) s+=buf[i]*buf[i];
+    const rms = Math.sqrt(s/buf.length);
+    const db = Math.max(30, Math.min(120, Math.round(20*Math.log10(rms||1e-8) + 100)));
+    sum+=db; n++; peak=Math.max(peak,db);
+    const [, col] = levelText(db);
+    $("mNow").textContent = db; $("gFill").style.width = ((db-30)/90*100)+"%"; $("gFill").style.background = col;
+    if (Date.now() < end) meter.raf = requestAnimationFrame(tick);
+    else {
+      stopMeter();
+      noise = {avg:Math.round(sum/n), peak};
+      const [txt, c2] = levelText(noise.avg);
+      $("mNow").textContent = noise.avg;
+      $("mResult").innerHTML = `<div class="msg" style="background:#fff;border:2px solid ${c2};color:${c2}">
+        ${t("avg")}: <b>${noise.avg} dB</b> · ${t("peak")}: <b>${noise.peak} dB</b><br>${txt}</div>`;
+      $("meterBtn").textContent = t("measureAgain");
+    }
+  };
+  tick();
+}
+function stopMeter(){
+  if (meter.raf) cancelAnimationFrame(meter.raf);
+  if (meter.stream) meter.stream.getTracks().forEach(tr=>tr.stop());
+  if (meter.ctx) meter.ctx.close().catch(()=>{});
+  meter.running=false; meter.stream=null; meter.ctx=null;
+  if ($("meterBtn")) $("meterBtn").disabled=false;
+}
+
+/* =========================================================
+   GEOLOCATION + GEOTAGGED PHOTO
+   ========================================================= */
+function getLocation(){
+  return new Promise((res,rej)=>{
+    if(!navigator.geolocation) return rej(new Error("Geolocation not supported on this device."));
+    navigator.geolocation.getCurrentPosition(
+      p=>res({lat:p.coords.latitude, lng:p.coords.longitude, acc:Math.round(p.coords.accuracy)}),
+      e=>rej(new Error(e.code===1?"Location permission denied. Please allow location access.":"Could not get location. Turn on GPS and try again.")),
+      {enableHighAccuracy:true, timeout:20000, maximumAge:0});
+  });
+}
+
+async function reverseGeocode(lat,lng){
+  try{
+    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=17`);
+    const j = await r.json(); return j.display_name || "";
+  }catch(e){ return ""; }
+}
+
+let locPromise = null;
+function takePhoto(){
+  locPromise = getLocation();
+  locPromise.catch(()=>{});
+  $("locStatus").className="loc"; $("locStatus").textContent=t("locWait");
+  $("cPhoto").click();
+}
+
+function resetPhoto(){
+  photo=null; $("cPhoto").value=""; $("photoPreview").classList.add("hidden");
+  $("locStatus").className="loc"; $("locStatus").textContent=t("locIdle");
+}
+
+async function handlePhoto(e){
+  const file = e.target.files[0]; if(!file) return;
+  let loc;
+  try{ loc = await (locPromise || getLocation()); }
+  catch(err){ $("locStatus").className="loc"; $("locStatus").innerHTML=`<span style="color:var(--danger)">${err.message}</span>`; return; }
+
+  $("locStatus").textContent=t("stamping");
+  const time = new Date();
+  const place = await reverseGeocode(loc.lat, loc.lng);
+  const dataUrl = await stampPhoto(file, loc, time, place);
+  photo = {dataUrl, ...loc, time:time.toISOString(), place};
+
+  $("photoPreview").src = dataUrl; $("photoPreview").classList.remove("hidden");
+  $("locStatus").className="loc good";
+  $("locStatus").innerHTML = `✅ ${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)} (±${loc.acc} m)<br>${place||""}`;
+}
+
+function stampPhoto(file, loc, time, place){
+  return new Promise((resolve,reject)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const max=1280, s=Math.min(1, max/Math.max(img.width,img.height));
+      const w=Math.round(img.width*s), h=Math.round(img.height*s);
+      const cv=document.createElement("canvas"); cv.width=w; cv.height=h;
+      const ctx=cv.getContext("2d"); ctx.drawImage(img,0,0,w,h);
+
+      const fs=Math.max(14,Math.round(w/45));
+      const lines=[
+        `${CONFIG.CORP_NAME} · Civic Sense AI`,
+        `Lat: ${loc.lat.toFixed(6)}  Long: ${loc.lng.toFixed(6)}  (±${loc.acc} m)`,
+        time.toLocaleString("en-IN"),
+      ];
+      if(place) lines.push(place.length>80 ? place.slice(0,80)+"…" : place);
+      const pad=fs*0.6, bandH=lines.length*fs*1.35+pad*2;
+      ctx.fillStyle="rgba(0,0,0,0.6)"; ctx.fillRect(0,h-bandH,w,bandH);
+      ctx.fillStyle="#fff"; ctx.font=`700 ${fs}px Mukta, sans-serif`; ctx.textBaseline="top";
+      lines.forEach((tx,i)=>ctx.fillText(tx,pad,h-bandH+pad+i*fs*1.35,w-pad*2));
+      resolve(cv.toDataURL("image/jpeg",0.85));
+      URL.revokeObjectURL(img.src);
+    };
+    img.onerror=()=>reject(new Error("Could not read the photo."));
+    img.src=URL.createObjectURL(file);
+  });
+}
+
+/* =========================================================
+   SOS (Rakshak Dal) – works from anywhere in the app
+   ========================================================= */
+async function sendSOS(){
+  if (!confirm(t("sosConfirm"))) return;
+  toast(t("sosGetting"), "info");
+  try{
+    const loc = await getLocation();
+    const id = makeId("SOS");
+    const cat = (current && current.rakshak && view==="form") ? current.en : "Women Safety";
+    await api("complaint",{
+      id, date:new Date().toISOString(), mobile:user.mobile, name:user.name, ward:user.ward,
+      category:cat, subType:"SOS – Immediate help", description:"SOS raised from app",
+      landmark:"", lat:loc.lat, lng:loc.lng, accuracy:loc.acc, priority:"Emergency", rakshak:true
+    });
+    toast(`🚨 ${t("sosSent")}<b>${id}</b><br>${loc.lat.toFixed(5)}, ${loc.lng.toFixed(5)}`, "ok");
+  }catch(err){ toast(err.message + t("sosFail"), "err"); }
+}
+
+/* =========================================================
+   SUBMIT COMPLAINT + WORD FILE
+   ========================================================= */
+function makeId(prefix){
+  const d=new Date(), p=n=>String(n).padStart(2,"0");
+  return `${prefix||"CS"}-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${Math.floor(1000+Math.random()*9000)}`;
+}
+
+async function submitComplaint(e){
+  e.preventDefault();
+  if(!photo) return msg("submitMsg", t("photoReq"));
+  const btn=$("submitBtn"); busy(btn,true,t("submitting"));
+
+  let desc = $("cDesc").value.trim();
+  if (current.meter && noise) desc += `\n[Noise meter reading (approx.): average ${noise.avg} dB, peak ${noise.peak} dB]`;
+
+  const c = {
+    id: makeId(current.cert ? "CERT" : "CMP"),
+    date: new Date().toISOString(),
+    mobile:user.mobile, name:user.name, ward:user.ward, address:user.address,
+    category: `${current.en} (${current.mr})`,
+    subType: $("cSub").value,
+    description: desc,
+    landmark: $("cLandmark").value.trim(),
+    applicant: current.cert ? $("cApplicant").value.trim() : "",
+    purpose: current.cert ? $("cPurpose").value.trim() : "",
+    priority: current.cert ? "Normal" : $("cPriority").value,
+    rakshak: !!current.rakshak,
+    noise: current.meter && noise ? noise : null,
+    lat: photo.lat, lng: photo.lng, accuracy: photo.acc, place: photo.place, photoTime: photo.time
+  };
+
+  try{
+    const blob = await buildDocx(c);
+    const docxBase64 = await blobToBase64(blob);
+    const res = await api("complaint",{...c, docxBase64});
+    if(!res.ok) throw new Error(res.error||"Server error");
+
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`${c.id}.docx`; a.click();
+
+    msg("submitMsg",`${t("submitOk")}<br>${t("cid")}: <b>${c.id}</b>${c.rakshak?"<br>"+t("fwdRk"):""}<br>${t("docDl")}`,"ok");
+    $("complaintForm").reset(); resetPhoto(); resetMeter();
+    if(current.cert) $("cApplicant").value=user.name;
+    if(current.rakshak) $("cPriority").value="High";
+  }catch(err){ msg("submitMsg",t("submitFail")+err.message); }
+  busy(btn,false);
+}
+
+function blobToBase64(blob){
+  return new Promise(r=>{ const fr=new FileReader(); fr.onload=()=>r(fr.result.split(",")[1]); fr.readAsDataURL(blob); });
+}
+function dataUrlToBytes(u){ const b=atob(u.split(",")[1]); const a=new Uint8Array(b.length); for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i); return a; }
+
+async function buildDocx(c){
+  const {Document,Packer,Paragraph,TextRun,ImageRun,Table,TableRow,TableCell,WidthType,AlignmentType,HeadingLevel} = docx;
+
+  const cell=(tx,bold,shade)=>new TableCell({
+    width:{size:bold?30:70,type:WidthType.PERCENTAGE},
+    shading: shade?{fill:"EAF0FF"}:undefined,
+    children:[new Paragraph({children:[new TextRun({text:String(tx||"—"),bold})]})]
+  });
+  const rows = [
+    ["Complaint ID", c.id],
+    ["Date & Time", new Date(c.date).toLocaleString("en-IN")],
+    ["Citizen Name", c.name],
+    ["Mobile", c.mobile],
+    ["Ward", c.ward],
+    ["Residential Address", c.address],
+    ["Category", c.category],
+    [c.applicant?"Certificate Type":"Issue Type", c.subType],
+    ...(c.applicant ? [["Applicant Name",c.applicant],["Purpose",c.purpose]] : [["Urgency",c.priority]]),
+    ...(c.rakshak ? [["Assigned To","Rakshak Dal (Nagarpalika Security Force)"]] : []),
+    ...(c.noise ? [["Measured Noise (approx.)",`Average ${c.noise.avg} dB, Peak ${c.noise.peak} dB`]] : []),
+    ["Landmark / Location", c.landmark],
+    ["GPS Coordinates", `${c.lat.toFixed(6)}, ${c.lng.toFixed(6)} (±${c.accuracy} m)`],
+    ["Detected Address", c.place],
+    ["Google Maps Link", `https://maps.google.com/?q=${c.lat},${c.lng}`],
+    ["Photo Taken At", new Date(c.photoTime).toLocaleString("en-IN")]
+  ].map(([k,v])=>new TableRow({children:[cell(k,true,true),cell(v)]}));
+
+  const img = new Image(); img.src = photo.dataUrl; await img.decode();
+  const pw = 450, ph = Math.round(pw*img.height/img.width);
+
+  const doc = new Document({
+    styles:{default:{document:{run:{font:"Mangal",size:22}}}},
+    sections:[{children:[
+      new Paragraph({alignment:AlignmentType.CENTER,heading:HeadingLevel.HEADING_1,children:[new TextRun({text:CONFIG.CORP_NAME_MR,bold:true,size:36})]}),
+      new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:CONFIG.CORP_NAME,bold:true,size:30})]}),
+      new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"Civic Sense AI – Citizen "+(c.applicant?"Certificate Application":"Complaint"),size:26})]}),
+      new Paragraph({alignment:AlignmentType.CENTER,spacing:{after:200},children:[new TextRun({text:`Category: ${c.category}`,italics:true})]}),
+      new Table({width:{size:100,type:WidthType.PERCENTAGE},rows}),
+      new Paragraph({spacing:{before:300,after:100},children:[new TextRun({text:"Description",bold:true,size:26})]}),
+      ...c.description.split("\n").map(line=>new Paragraph({children:[new TextRun(line)]})),
+      new Paragraph({spacing:{before:300,after:100},children:[new TextRun({text:"Geotagged Photograph",bold:true,size:26})]}),
+      new Paragraph({alignment:AlignmentType.CENTER,children:[new ImageRun({data:dataUrlToBytes(photo.dataUrl),transformation:{width:pw,height:ph}})]}),
+      new Paragraph({spacing:{before:400},children:[new TextRun({text:"Declaration: I confirm that the information given above is true to the best of my knowledge.",size:20})]}),
+      new Paragraph({spacing:{before:400},alignment:AlignmentType.RIGHT,children:[new TextRun({text:`(${c.name})`,bold:true})]}),
+      new Paragraph({alignment:AlignmentType.RIGHT,children:[new TextRun({text:"Citizen",size:20})]})
+    ]}]
+  });
+  return Packer.toBlob(doc);
+}
+
+/* =========================================================
+   MY COMPLAINTS
+   ========================================================= */
+function statusText(st){
+  const m = {open:"stOpen","in progress":"stProgress",resolved:"stResolved",closed:"stClosed"};
+  const k = m[String(st||"Open").toLowerCase()]; return k ? t(k) : st;
+}
+function catText(cat){
+  const c = CATEGORIES.find(x=>String(cat||"").startsWith(x.en)); return c ? L([c.en,c.mr]) : cat;
+}
+function subText(cat, sub){
+  for (const c of CATEGORIES){ const s=(c.subs||[]).find(p=>p[0]===sub); if(s) return L(s); }
+  return sub;
+}
+async function loadList(){
+  $("listBody").innerHTML=`<tr><td colspan="5">${t("loading")}</td></tr>`; msg("listMsg","");
+  try{
+    const res = await api("list",{mobile:user.mobile});
+    const list = res.complaints||[];
+    if(!list.length){ $("listBody").innerHTML=`<tr><td colspan="5">${t("noComplaints")}</td></tr>`; return; }
+    $("listBody").innerHTML = list.map(c=>{
+      const st=(c.status||"Open"), cls=/resolv|clos|issued/i.test(st)?"b-done":(c.priority==="Emergency"||c.priority==="High")?"b-high":"b-open";
+      return `<tr><td><b>${c.id}</b></td><td>${fmtDate(c.date)}</td><td>${catText(c.category)}</td><td>${subText(c.category,c.subType)}</td><td><span class="badge ${cls}">${statusText(st)}</span></td></tr>`;
+    }).join("");
+  }catch(err){ $("listBody").innerHTML=""; msg("listMsg",t("loadFail")+err.message); }
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+// copy the header logo into the login hero so both animate
+document.querySelector(".logo.big").innerHTML = document.querySelector("header .logo").innerHTML.replace(/(id="|url\(#|href="#)L-/g,"$1B-");
+try{ $("favicon").href = "data:image/svg+xml," + encodeURIComponent(document.querySelector("header .logo").outerHTML); }catch(e){}
+$("rakshakCall").href = $("homeCall").href = "tel:" + CONFIG.RAKSHAK_DAL_PHONE;
+if (!CONFIG.SCRIPT_URL) $("demoBanner").classList.remove("hidden");
+
+try { user = JSON.parse(localStorage.getItem("cs_user") || sessionStorage.getItem("cs_user")); } catch(e){ user = null; }
+setLang(lang);
+if (user) enterApp();
+checkBackend();
+</script>
+</body>
+</html>
